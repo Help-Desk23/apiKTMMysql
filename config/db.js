@@ -1,4 +1,4 @@
-const mysql = require('mysql2');
+/*const mysql = require('mysql2');
 require('dotenv').config();
 
 const db = mysql.createConnection({
@@ -16,9 +16,9 @@ db.connect((err) => {
     console.log('Conectado a la base de datos correctamente.');
 });
 
-module.exports = db;
+module.exports = db;*/
 
-/*const mysql = require('mysql2');
+const mysql = require('mysql2');
 require('dotenv').config();
 
 const db = mysql.createPool({
@@ -34,4 +34,4 @@ const db = mysql.createPool({
   // Puedes ajustar este número según lo necesites
 });
 
-module.exports = db;*/
+module.exports = db;

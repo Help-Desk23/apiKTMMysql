@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
+const cors = require('cors');
 const { getAdmin } = require('./controllers/admin/admin');
 const adminRouter = require('./router/admin/adminRouter');
 const { getSucursales } = require('./controllers/sucursales/sucursal');
@@ -22,6 +23,11 @@ const app = express();
 app.use(express.json());
 require('dotenv').config();
 
+app.use(cors({
+    origin: ['http://localhost:5173', 'https://tusitio.com'], // reemplaza con tu dominio real
+    methods: ['GET', 'POST','PATCH', 'DELETE'],
+    credentials: true
+}));
 
 // Configuracion inicial WebSocket
 
@@ -29,7 +35,7 @@ const server = http.createServer(app);
 const io = socketIo(server, {
     cors: {
         origin: '*',
-        methods: ['GET', 'POST']
+        methods: ['GET', 'POST', 'PATCH', 'DELETE']
     }
 });
 
