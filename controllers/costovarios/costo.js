@@ -20,12 +20,12 @@ const getCostos = async  (socket) => {
 // Controlador POST para crear costos varios
 
 const addCosto = async (req, res) => {
-    const { interes_anual, tipo_cambio, formulario} = req.body;
+    const { interes_anual, tipo_cambio, formulario, descuento_inicial} = req.body;
     const fecha_actualizacion = new Date();
 
     try {
-        const query = "INSERT INTO costovarios (interes_anual, tipo_cambio, formulario, fecha_actualizacion) VALUES (?, ?, ?, ?)";
-        const values = [interes_anual, tipo_cambio, formulario, fecha_actualizacion];
+        const query = "INSERT INTO costovarios (interes_anual, tipo_cambio, formulario, descuento_inicial, fecha_actualizacion) VALUES (?, ?, ?, ?, ?)";
+        const values = [interes_anual, tipo_cambio, formulario, descuento_inicial, fecha_actualizacion];
 
         db.query(query, values, (error, result) => {
             if(error) {
@@ -44,7 +44,7 @@ const addCosto = async (req, res) => {
 
 const updateCosto = async (req, res) => {
     const {id} = req.params;
-    const {interes_anual, tipo_cambio, formulario} = req.body;
+    const {interes_anual, tipo_cambio, formulario, descuento_inicial} = req.body;
     const fecha_actualizacion = new Date();
 
     const update = []
@@ -63,6 +63,11 @@ const updateCosto = async (req, res) => {
     if(formulario){
         update.push('formulario = ?');
         values.push(formulario);
+    }
+
+    if(descuento_inicial){
+        update.push('descuento_inicial = ?');
+        values.push(descuento_inicial);
     }
 
     if(fecha_actualizacion){

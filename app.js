@@ -2,6 +2,8 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const cors = require('cors');
+require('dotenv').config();
+
 const { getAdmin } = require('./controllers/admin/admin');
 const adminRouter = require('./router/admin/adminRouter');
 const { getSucursales } = require('./controllers/sucursales/sucursal');
@@ -21,27 +23,30 @@ const clienteRouter = require('./router/cliente/clienteRouter');
 
 const app = express();
 app.use(express.json());
-require('dotenv').config();
 
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://tusitio.com'], // reemplaza con tu dominio real
-    methods: ['GET', 'POST','PATCH', 'DELETE'],
+    origin: [
+        'http://localhost:5173', 
+        'http://177.222.114.122',
+        'http://localhost'
+    ],
+    methods: ['GET', 'POST','PATCH', 'DELETE', 'PUT'],
     credentials: true
 }));
 
-// Configuracion inicial WebSocket
+app.use(express.json());
+
 
 const server = http.createServer(app);
 const io = socketIo(server, {
     cors: {
         origin: '*',
-        methods: ['GET', 'POST', 'PATCH', 'DELETE']
+        methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT']
     }
 });
 
 io.on('connection', (socket) => {
     console.log('Cliente conectado:', socket.id);
-
 
     socket.on('obtenerAdmin', () => {getAdmin(socket)});
     socket.on('obtenerSucursales', () => {getSucursales(socket)});
@@ -59,7 +64,7 @@ io.on('connection', (socket) => {
 });
 
 app.get('/', (req, res) => {
-    res.send('🚀 API funcionando correctamente desde Render');
+    res.send('🚀 API KTM funcionando correctamente desde Servidor Local');
   });
 
 
@@ -73,8 +78,7 @@ app.use('/', proformaRout);
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-const PORT = process.env.PORT;
-
+const PORT = process.env.API_PORT || 6000;
 server.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
