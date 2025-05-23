@@ -57,11 +57,17 @@ const addCliente = async (req, res) => {
                 }
 
                 if (coincidenciaNombre) {
-                    return res.status(409).json({ error: "Ya existe un cliente con ese nombre pero con diferente teléfono" });
+                    return res.status(200).json({
+                        error: "Ya existe un cliente con ese nombre pero con diferente teléfono",
+                        id_cliente: coincidenciaNombre.id_cliente
+                    });
                 }
 
                 if (coincidenciaTelefono) {
-                    return res.status(409).json({ error: "Ya existe un cliente con ese teléfono pero con diferente nombre" });
+                    return res.status(200).json({
+                        error: "Ya existe un cliente con ese teléfono pero con diferente nombre",
+                        id_cliente: coincidenciaTelefono.id_cliente
+                    });
                 }
             }
 
