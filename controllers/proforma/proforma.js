@@ -18,8 +18,8 @@ const db = require('../../config/db.js');
 };*/
 
 const getProformas = async (socket) => {
-    const page = parseInt(data.page) || 1;
-    const limit = parseInt(data.limit) || 10;
+    const page = parseInt(data?.pagina || 1); // Usa pagina que se envia desde el frontend
+    const limit = 10;
     const offset = (page - 1) * limit;
 
     try{
