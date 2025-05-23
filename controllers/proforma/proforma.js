@@ -2,7 +2,7 @@ const db = require('../../config/db.js');
 
 // Controlador GET para obtener proformas
 
-const getProformas = async (socket) => {
+/*const getProformas = async (socket) => {
     const query = "SELECT * FROM proforma";
     try {
         const [rows] = await db.promise().query(query);
@@ -14,6 +14,33 @@ const getProformas = async (socket) => {
     } catch (err) {
         console.error("Error al obtener proformas:", err);
         socket.emit('error', { message: "Error al obtener proformas" });
+    }
+};*/
+
+const getProformas = async (socket) => {
+    const page = parseInt(data.page) || 1;
+    const limit = parseInt(data.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    try{
+        const [rows] = await db.promise().query(
+            'SELECT * FROM proforma LIMIT ? OFFSET ?', [limit, offset]
+        );
+
+        const [countResult] = await db.promise().query('SELECT COUNT(*) as total FROM proforma');
+        const total = countResult[0].total;
+        const totalPages = Math.ceil(total / limit);
+
+        socket.emit('proforma', {
+            data: rows,
+            currentPage: page,
+            totalPages,
+            totalItems: total
+        });
+
+    }catch(err){
+        console.error("Error al obtener proforma:", err);
+        socket.emit('error', {message: "Error al obtener proformas"});
     }
 };
 

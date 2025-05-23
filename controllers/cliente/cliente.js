@@ -18,7 +18,6 @@ const getClientes = async (socket) => {
     }
 };
 
-
 // Controlador POST para crear un cliente
 
 const addCliente = async (req, res) => {
