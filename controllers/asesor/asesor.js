@@ -20,11 +20,11 @@ const getAsesores = async (socket) => {
 // Controlador POST para crear un asesor
 
 const addAsesor = async (req, res) => {
-    const {id_sucursal, asesor, usuario, contraseña} = req.body;
+    const {id_sucursal, asesor, usuario, contraseña, telefono, estado} = req.body;
     
     try {
-        const query = "INSERT INTO asesores (id_sucursal, asesor, usuario, contraseña) VALUES (?, ?, ?, ?)";
-        const values = [id_sucursal, asesor, usuario, contraseña];
+        const query = "INSERT INTO asesores (id_sucursal, asesor, usuario, contraseña, telefono, estado) VALUES (?, ?, ?, ?, ?, ?)";
+        const values = [id_sucursal, asesor, usuario, contraseña, telefono, estado];
 
         db.query(query, values, (error, result) => {
             if(error){
@@ -43,7 +43,7 @@ const addAsesor = async (req, res) => {
 
 const updateAsesor = async (req, res) => {
     const {id} = req.params;
-    const {id_sucursal, asesor, usuario, contraseña} = req.body;
+    const {id_sucursal, asesor, usuario, contraseña, telefono, estado} = req.body;
 
     const update = []
     const values = []
@@ -66,6 +66,19 @@ const updateAsesor = async (req, res) => {
     if(contraseña){
         update.push('contraseña = ?');
         values.push(contraseña);
+    }
+
+    if(telefono){
+        update.push('telefono = ?');
+        values.push(telefono)
+    }
+
+    if(estado) {
+        if(estado !== 'activo' && estado !== 'inactivo'){
+            return res.status(400).json({error: "El valor de 'estado' debe ser 'activo' o 'inactivo'" });
+        }
+        update.push('estado = ?');
+        values.push(estado);
     }
 
     if(update.length === 0){
@@ -122,6 +135,11 @@ const loginAsesor = async (req, res) => {
             }
 
             const asesor = result[0];
+
+            if (asesor.estado !== 'activo'){
+                return res.status(403).json({ error: "Este usuario está inhabilitado" });
+            }
+
             res.status(200).json({message: "Inicio exitoso", asesor});
         });
     }catch(err){
@@ -130,11 +148,10 @@ const loginAsesor = async (req, res) => {
     }
 };
 
-
 module.exports = {
     getAsesores,
     addAsesor,
     updateAsesor,
     deleteAsesor,
-    loginAsesor
+    loginAsesor,
 };

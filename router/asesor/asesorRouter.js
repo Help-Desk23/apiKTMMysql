@@ -1,5 +1,5 @@
 const express = require('express');
-const { addAsesor, updateAsesor, deleteAsesor, loginAsesor } = require('../../controllers/asesor/asesor');
+const { addAsesor, updateAsesor, deleteAsesor, loginAsesor, estadoAsesor } = require('../../controllers/asesor/asesor');
 
 const asesorRouter = express.Router();
 
@@ -20,5 +20,6 @@ asesorRouter.delete('/asesores/:id', deleteAsesor);
 // Ruta para login de usuario
 
 asesorRouter.post('/asesores/login', loginAsesor);
+
 
 module.exports = asesorRouter;
